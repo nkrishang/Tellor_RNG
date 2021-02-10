@@ -16,5 +16,5 @@ interface IRandomNumberGenerator {
      * @param _range A range for the random number given by the caller requesting a random number.
      * @return _queuePosition The queue position of the caller in the RNG.
     **/
-    function requestRandomNumber(uint256 _range) external returns (uint256 _queuePosition);
+    function randomNumberRequest(uint256 _range) external returns (uint256 _queuePosition);
 }

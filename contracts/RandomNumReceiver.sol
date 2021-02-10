@@ -18,18 +18,40 @@ import "./interace/IRandomNumReceiver.sol"
 
 contract RandomNumReceiver is UsingTellor, IRandomNumReceiver {
 
-    // State variables
-
+    /// @dev The RNG responsible for generating random numbers for the receiver.
     IRandomNumGenerator public rng;
-    uint256 public latestRandomNumber;
 
-    // functions
+    /// @dev Queue position for th random number returned by RNG => address of the caller at that queue position.
+    mapping (uint256 => address) queuePositionToAddress;
+
+    /// @dev To emit when RNG calls reeiver with a random number.
+    event RandomNumberReceived(uint256 _randomNumber, address indexed _caller)
+
+    /// @dev To emit with the queue position of the receiver, in the RNG contract.
+    event InQueueForRandomNumber(uint256 _queuePosition, address indexed _caller);
+
 
     /**
      * @dev Receive random number from RNG. Called by a IRandomNumGenerator contract.
      * @param _randomNumber The random number sent by the RNG i.e. IRandomNumGenerator.
     **/
-    function receiveRandomNumber(uint256 _randomNumber) external {
+    function receiveRandomNumber(uint256 _randomNumber, uint256 _queuePosition) external {
 
+        require(msg.sender == rng, "Only the authorized RNG can send a random number.");
+
+        address caller = queuePositionToAddress[_queuePosition];
+        emit RandomNumberReceived(_randomNumber, caller);
+    }
+
+    /**
+     * @dev Request random number from RNG.
+     * @param _range A range for the random number given by the caller requesting a random number.
+    **/
+    function requestRandomNumber(uint256 _range) external {
+
+        uint256 queuePosition = rng.randomNumberRequest(_range);
+        queuePositionToAddress[queuePosition] = msg.sender;
+        
+        emit InQueueForRandomNumber(queuePosition, msg.sender);
     }
 }   

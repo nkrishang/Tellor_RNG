@@ -64,17 +64,17 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
 
         (valueAtLastUpdate, blockTimestampAtLastUpdate) = (value, _timestampRetrieved);
 
-        address receiverAddress = dequeue();
+        (address receiverAddress, uint256 queuePosition) = dequeue();
         IRandomNumReceiver randomNumberReceiver = IRandomNumReceiver(receiverAddress);
         uint256 numRange = range[receiverAddress];
 
         uint256 randomNumber = calculateRandomNumber(value, _timestampRetrieved, numRange)
-        randomNumberReceiver.receiveRandomNumber(randomNumber);
+        randomNumberReceiver.receiveRandomNumber(randomNumber, queuePosition);
 
         emit RandomNumberGenerated(randomNumber, receiverAddress);
     }
 
-    function requestRandomNumber(uint256 _range) external returns (uint256) {
+    function randomNumberRequest(uint256 _range) external returns (uint256) {
 
         require(_range < block.number, "The range for the random number must be less than the blocknumber.")
 
@@ -109,11 +109,13 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
 
         require(requestQueue.last >= requestQueue.first, "The queue is empty");
 
-        address receiver = requestQueue.queue[requestQueue.first];
-        delete requestQueue.queue[requestQueue.first];
+        uint queuePosition = requestQueue.first;
+
+        address receiver = requestQueue.queue[queuePosition];
+        delete requestQueue.queue[queuePosition];
         requestQueue.first += 1;
 
-        return receiver;
+        return (receiver, queuePosition);
     }
 
 }
