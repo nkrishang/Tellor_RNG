@@ -17,4 +17,9 @@ interface IRandomNumberGenerator {
      * @return _queuePosition The queue position of the caller in the RNG.
     **/
     function randomNumberRequest(uint256 _range) external returns (uint256 _queuePosition);
+
+    /**
+     * @dev Generates random number and sends it to a IRandomNumReceiver contract.
+    **/
+    function generateRandomNumber() external;
 }
