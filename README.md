@@ -1,5 +1,9 @@
 # Random Number Generator using Tellor
 An on-chain, (non-pseudo) random number generator (RNG) that uses Tellor oracle's ETH/USD price feed updates.
+
+### Contracts deployed on Rinkeby
+RandomNumGenerator.sol : [0x9a86f28bc657f4ab12dc352bcb21372d7e9aeb71](https://rinkeby.etherscan.io/address/0x9a86f28bc657f4ab12dc352bcb21372d7e9aeb71)
+RandomNumReceiver.sol : [0x1A04f58426C62Ec19c9758390aB6c2228052A1F4](https://rinkeby.etherscan.io/address/0x1A04f58426C62Ec19c9758390aB6c2228052A1F4)
  
 ## The general problem with on chain RNGs
 ![Generic RNG architecture](https://i.ibb.co/Ln66z95/rng-graphic-one.png)
