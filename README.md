@@ -4,7 +4,7 @@ An on-chain, (non-pseudo) random number generator (RNG) that uses Tellor oracle'
 ### Contracts deployed on Rinkeby
 - RandomNumGenerator.sol : [0x9a86f28bc657f4ab12dc352bcb21372d7e9aeb71](https://rinkeby.etherscan.io/address/0x9a86f28bc657f4ab12dc352bcb21372d7e9aeb71)
 - RandomNumReceiver.sol : [0x1A04f58426C62Ec19c9758390aB6c2228052A1F4](https://rinkeby.etherscan.io/address/0x1A04f58426C62Ec19c9758390aB6c2228052A1F4)
-- `NewValue` event listener server running on Replit [here.](https://TellorRNG.nkrishang.repl.co)
+- `NewValue` event listener server running on Replit [here.](https://repl.it/@nkrishang/TellorRNG)
  
 ## The general problem with on-chain RNGs
 ![Generic RNG architecture](https://i.ibb.co/Ln66z95/rng-graphic-one.png)
@@ -26,7 +26,7 @@ Let's say a protocol like Pool Together wishes to use this RNG. Simply put, the 
 - We implement RandomNumGenerator.sol i.e. the random number generator. [View contract.](https://github.com/nkrishang/Tellor_RNG/blob/master/contracts/RandomNumGenerator.sol)
 - Some protocol, like Pool Together, makes a request for a random number. They are added to the queue in RandomNumGenerator.sol.
 - The requesting protocol will implement the IRandomNumReceiver interface and can be called back from `generateRandomNumber` when the number is available.
-- Anyone can call `generateRandomNumber` post a new price update. I have an express server listening for the `NewValue` event on Tellor's core contract on Rinkeby, [here.](https://TellorRNG.nkrishang.repl.co)
+- Anyone can call `generateRandomNumber` post a new price update. I have an express server listening for the `NewValue` event on Tellor's core contract on Rinkeby, [here.](https://repl.it/@nkrishang/TellorRNG)
 
 ## Why is this solution better than any generic on-chain RNG?
 
