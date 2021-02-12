@@ -5,7 +5,7 @@ An on-chain, (non-pseudo) random number generator (RNG) that uses Tellor oracle'
 - RandomNumGenerator.sol : [0x9a86f28bc657f4ab12dc352bcb21372d7e9aeb71](https://rinkeby.etherscan.io/address/0x9a86f28bc657f4ab12dc352bcb21372d7e9aeb71)
 - RandomNumReceiver.sol : [0x1A04f58426C62Ec19c9758390aB6c2228052A1F4](https://rinkeby.etherscan.io/address/0x1A04f58426C62Ec19c9758390aB6c2228052A1F4)
  
-## The general problem with on chain RNGs
+## The general problem with on-chain RNGs
 ![Generic RNG architecture](https://i.ibb.co/Ln66z95/rng-graphic-one.png)
 
 As is well known by this point, this formula for churning out random numbers is vulnerable to miner attacks and the like. Block variables can be manipulated and any amount 
