@@ -15,3 +15,9 @@ Tellor helps us accomplish both. This project leverages **1)** Tellor's nature a
 
 ## The architechture of a Tellor RNG
 ![Solution architecture](https://i.ibb.co/F3vgjpy/rng-graphic-two.png)
+
+Let's say a protocol like Pool Together wishes to use this RNG. Simply put, the flow will be as follows:
+
+- We implement RandomNumGenerator.sol i.e. the random number generator. [View contract.](https://github.com/nkrishang/Tellor_RNG/blob/master/contracts/RandomNumGenerator.sol)
+- Some protocol, like Pool Together, makes a request for a random number. They are added to the queue in RandomNumGenerator.sol.
+- The requesting protocol will implement the IRandomNumReceiver interface and can be called back from generateRandomNumber when the number is available.
