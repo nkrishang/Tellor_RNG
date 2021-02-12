@@ -25,7 +25,8 @@ Let's say a protocol like Pool Together wishes to use this RNG. Simply put, the 
 
 - We implement RandomNumGenerator.sol i.e. the random number generator. [View contract.](https://github.com/nkrishang/Tellor_RNG/blob/master/contracts/RandomNumGenerator.sol)
 - Some protocol, like Pool Together, makes a request for a random number. They are added to the queue in RandomNumGenerator.sol.
-- The requesting protocol will implement the IRandomNumReceiver interface and can be called back from generateRandomNumber when the number is available.
+- The requesting protocol will implement the IRandomNumReceiver interface and can be called back from `generateRandomNumber` when the number is available.
+- Anyone can call `generateRandomNumber` post a new price update. I have an express server listening for the `NewValue` event on Tellor's core contract on Rinkeby, [here.](https://TellorRNG.nkrishang.repl.co)
 
 ## Why is this solution better than any generic on-chain RNG?
 
