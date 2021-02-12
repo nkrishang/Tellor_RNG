@@ -36,8 +36,8 @@
       ]
     },
     "C:\\Users\\krish\\OneDrive\\Desktop\\DeFi\\Tellor_RNG\\contracts\\RandomNumReceiver.sol": {
-      "lastModificationDate": 1613088555987,
-      "contentHash": "16f268dbfc0d532560ae52795af7b801",
+      "lastModificationDate": 1613132542249,
+      "contentHash": "5f8126966cdc68788069f5cd1da26f85",
       "sourceName": "contracts/RandomNumReceiver.sol",
       "solcConfig": {
         "version": "0.7.3",
@@ -213,8 +213,8 @@
       ]
     },
     "C:\\Users\\krish\\OneDrive\\Desktop\\DeFi\\Tellor_RNG\\contracts\\RandomNumGenerator.sol": {
-      "lastModificationDate": 1613089581436,
-      "contentHash": "2a52e9d72756bc6a208355cfef4779ba",
+      "lastModificationDate": 1613132872380,
+      "contentHash": "4d5f1517c5bf45bcf6326b44492979a2",
       "sourceName": "contracts/RandomNumGenerator.sol",
       "solcConfig": {
         "version": "0.7.3",
@@ -240,7 +240,6 @@
       },
       "imports": [
         "usingtellor/contracts/UsingTellor.sol",
-        "hardhat/console.sol",
         "./interface/IRandomNumGenerator.sol",
         "./interface/IRandomNumReceiver.sol"
       ],

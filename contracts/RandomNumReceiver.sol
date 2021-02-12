@@ -30,11 +30,17 @@ contract RandomNumReceiver is UsingTellor, IRandomNumReceiver {
     /// @dev To emit with the queue position of the receiver, in the RNG contract.
     event InQueueForRandomNumber(uint256 _queuePosition, address indexed _caller);
 
-    constructor(address payable _tellorAddress) UsingTellor(_tellorAddress) {}
+    constructor(
+        address payable _tellorAddress,
+        address _generatorAddress
+    ) UsingTellor(_tellorAddress) {
+        rng = IRandomNumGenerator(_generatorAddress);
+    }
 
     /**
      * @dev Receive random number from RNG. Called by a IRandomNumGenerator contract.
      * @param _randomNumber The random number sent by the RNG i.e. IRandomNumGenerator.
+     * @param _queuePosition The address the random number's for, denoted by queue position. 
     **/
     function receiveRandomNumber(uint256 _randomNumber, uint256 _queuePosition) external override {
 

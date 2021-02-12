@@ -10,13 +10,12 @@ pragma solidity >=0.7.0;
 pragma experimental ABIEncoderV2;
 
 import "usingtellor/contracts/UsingTellor.sol";
-import "hardhat/console.sol"; // To be removed in production.
-
 import "./interface/IRandomNumGenerator.sol";
 import "./interface/IRandomNumReceiver.sol";
 
 contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
 
+    /// @dev The Tellor request id for ETH/USD price feed
     uint256 public TELLOR_REQUEST_ID = 1;
 
     /// @dev The latest ETH/USD price set when the contract sends the caller a random number.
@@ -47,16 +46,16 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
         valueAtLastUpdate = 0;
         blockTimestampAtLastUpdate = 0;
 
-        // Initializing the request queue struct.
         requestQueue.first = 1;
         requestQueue.last = 0;
     }
 
+    /// @dev Send random number to an IRandomNumReceiver contract.
     function generateRandomNumber() external override {
 
         (bool ifRetrieve, uint256 value, uint256 _timestampRetrieved) = getCurrentValue(TELLOR_REQUEST_ID);
 
-        require(ifRetrieve, "The latest price update could not be retrieved from Tellor."); // Check if it's the right usage.
+        require(ifRetrieve, "The latest price update could not be retrieved from Tellor.");
         require(_timestampRetrieved > blockTimestampAtLastUpdate, "Only one random number generated per price update.");
         require(valueAtLastUpdate != value, "Cannot generate a truly random number if the asset value hasn't changed.");
 
@@ -72,10 +71,14 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
         emit RandomNumberGenerated(randomNumber, receiverAddress);
     }
 
+    /**
+     * @dev Process a request for random number by an IRandomNumReceiver contract.
+     * @param _range A range for the random number given by the caller requesting a random number.
+     * @return The queue position of the random number request.
+    **/
     function randomNumberRequest(uint256 _range) external override returns (uint256) {
 
-        require(_range < block.number, "The range for the random number must be less than the blocknumber.");
-
+        require(_range < 10000000, "The range for the random number must be less than the blocknumber.");
         address randomNumberReceiver = msg.sender;
 
         range[randomNumberReceiver] = _range;
@@ -86,6 +89,13 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
         return queuePosition;
     }
 
+    /**
+     * @dev Calculate random number.
+     * @param _value The latest ETH/USD price updated by Tellor.
+     * @param _timestamp The timestamp at which Tellor updated the ETH/USD price feed.
+     * @param _range The range the random number belongs to.
+     * @return The random number.
+    **/
     function calculateRandomNumber(
         uint256 _value, 
         uint256 _timestamp,
@@ -96,6 +106,7 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
         return randomNumber;
     }
 
+    /// @dev Add address to the request queue.
     function enqueue(address _receiver) internal returns (uint256) {
         requestQueue.last += 1;
         requestQueue.queue[requestQueue.last] = _receiver;
@@ -103,6 +114,7 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
         return (requestQueue.last - requestQueue.first + 1);
     }
 
+    /// @dev Remove address from the request queue.
     function dequeue() internal returns (address, uint256) {
 
         require(requestQueue.last >= requestQueue.first, "The queue is empty");
