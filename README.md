@@ -21,3 +21,14 @@ Let's say a protocol like Pool Together wishes to use this RNG. Simply put, the 
 - We implement RandomNumGenerator.sol i.e. the random number generator. [View contract.](https://github.com/nkrishang/Tellor_RNG/blob/master/contracts/RandomNumGenerator.sol)
 - Some protocol, like Pool Together, makes a request for a random number. They are added to the queue in RandomNumGenerator.sol.
 - The requesting protocol will implement the IRandomNumReceiver interface and can be called back from generateRandomNumber when the number is available.
+
+## Why is this solution better than any generic on-chain RNG?
+
+The Tellor RNG derives its randomness from the fact that the exact value of the next ETH/USD price update, and the timestamp of that update are unknowable beforehand, 
+and extremely difficult to manipulate.
+
+The Tellor protocol requires 5 miners to solve a proof of work challenge to be able to submit price values to the block about to be mined. For a malicious actor to cheat the RNG
+and predict these two values, they would have to **1)** manage to get all of the first 5 miners to input the same price value, and **3)** ensure that all 5 proof of work
+challenges are completed by the exact desired timetamp. This is terribly difficult.
+
+Can the Tellor RNG be manipulated? Absolutely. The usefulness of the Tellor RNG is a function of Tellor's decentralization, mining difficulty and block rate.
