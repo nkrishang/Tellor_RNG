@@ -1,0 +1,29 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IRandomNumReceiver",
+  "sourceName": "contracts/interface/IRandomNumReceiver.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_randomNumber",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_queuePosition",
+          "type": "uint256"
+        }
+      ],
+      "name": "receiveRandomNumber",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

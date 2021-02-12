@@ -12,8 +12,8 @@ pragma experimental ABIEncoderV2;
 import "usingtellor/contracts/UsingTellor.sol";
 import "hardhat/console.sol"; // To be removed in production.
 
-import "./interace/IRandomNumGenerator.sol"
-import "./interace/IRandomNumReceiver.sol"
+import "./interface/IRandomNumGenerator.sol";
+import "./interface/IRandomNumReceiver.sol";
 
 contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
 
@@ -41,25 +41,23 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
     event RandomNumberRequested(address indexed _receiver, uint256 _queuePosition);
 
     constructor(
-        address payable _tellorAddress,
-        uint256 _valueAtLastUpdate,
-        uint256 _blockTimestampAtLastUpdate
+        address payable _tellorAddress
     ) UsingTellor(_tellorAddress) {
 
-        valueAtLastUpdate =_valueAtLastUpdate;
-        blockTimestampAtLastUpdate = _blockTimestampAtLastUpdate;
+        valueAtLastUpdate = 0;
+        blockTimestampAtLastUpdate = 0;
 
         // Initializing the request queue struct.
         requestQueue.first = 1;
         requestQueue.last = 0;
     }
 
-    function generateRandomNumber() external {
+    function generateRandomNumber() external override {
 
         (bool ifRetrieve, uint256 value, uint256 _timestampRetrieved) = getCurrentValue(TELLOR_REQUEST_ID);
 
         require(ifRetrieve, "The latest price update could not be retrieved from Tellor."); // Check if it's the right usage.
-        require(_timestampRetrieved > blockTimestampAtLastUpdate, "Only one random number generated per price update.")
+        require(_timestampRetrieved > blockTimestampAtLastUpdate, "Only one random number generated per price update.");
         require(valueAtLastUpdate != value, "Cannot generate a truly random number if the asset value hasn't changed.");
 
         (valueAtLastUpdate, blockTimestampAtLastUpdate) = (value, _timestampRetrieved);
@@ -68,22 +66,22 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
         IRandomNumReceiver randomNumberReceiver = IRandomNumReceiver(receiverAddress);
         uint256 numRange = range[receiverAddress];
 
-        uint256 randomNumber = calculateRandomNumber(value, _timestampRetrieved, numRange)
+        uint256 randomNumber = calculateRandomNumber(value, _timestampRetrieved, numRange);
         randomNumberReceiver.receiveRandomNumber(randomNumber, queuePosition);
 
         emit RandomNumberGenerated(randomNumber, receiverAddress);
     }
 
-    function randomNumberRequest(uint256 _range) external returns (uint256) {
+    function randomNumberRequest(uint256 _range) external override returns (uint256) {
 
-        require(_range < block.number, "The range for the random number must be less than the blocknumber.")
+        require(_range < block.number, "The range for the random number must be less than the blocknumber.");
 
         address randomNumberReceiver = msg.sender;
 
         range[randomNumberReceiver] = _range;
         uint256 queuePosition = enqueue(randomNumberReceiver);
 
-        emit RandomNumberRequested(randomNumberReceiver, _queuePosition);
+        emit RandomNumberRequested(randomNumberReceiver, queuePosition);
         
         return queuePosition;
     }
@@ -92,7 +90,7 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
         uint256 _value, 
         uint256 _timestamp,
         uint256 _range
-    ) internal returns (uint256) {
+    ) internal view returns (uint256) {
 
         uint256 randomNumber =  ((_value*_timestamp) + block.number) % _range;
         return randomNumber;
@@ -100,12 +98,12 @@ contract RandomNumGenerator is UsingTellor, IRandomNumGenerator {
 
     function enqueue(address _receiver) internal returns (uint256) {
         requestQueue.last += 1;
-        requestQueue.queue[requestQueue.last] = _receiver
+        requestQueue.queue[requestQueue.last] = _receiver;
 
         return (requestQueue.last - requestQueue.first + 1);
     }
 
-    function dequeue() internal returns (address) {
+    function dequeue() internal returns (address, uint256) {
 
         require(requestQueue.last >= requestQueue.first, "The queue is empty");
 

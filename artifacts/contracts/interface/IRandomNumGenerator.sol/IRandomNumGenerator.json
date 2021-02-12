@@ -1,0 +1,37 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IRandomNumGenerator",
+  "sourceName": "contracts/interface/IRandomNumGenerator.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "generateRandomNumber",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_range",
+          "type": "uint256"
+        }
+      ],
+      "name": "randomNumberRequest",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "_queuePosition",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

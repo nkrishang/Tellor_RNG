@@ -9,7 +9,7 @@
 pragma solidity >=0.7.0;
 pragma experimental ABIEncoderV2;
 
-interface IRandomNumberGenerator {
+interface IRandomNumGenerator {
 
     /**
      * @dev Adds the caller in the RNG queue. Must be called by a IRandomNumReceiver contract.
