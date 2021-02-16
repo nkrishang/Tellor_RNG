@@ -12,7 +12,7 @@ An on-chain, (non-pseudo) random number generator (RNG) that uses Tellor oracle'
 As is well known by this point, this formula for churning out random numbers is vulnerable to miner attacks and the like. Block variables can be manipulated and any amount 
 of complex math can be reverse engineered. 
 
-To build a genuine on-chain random number, the random number generated must be a function of values that neither the contract, nor the caller know before the caller calls
+To build a genuine on-chain random number, the random number generated must be a function of values that neither the contract, nor the caller knows before the caller calls
 a random number generator function. Moreover, these 'unknown' values must be terribly hard to manipulate and fix, beforehand.
 
 Tellor helps us accomplish both. This project leverages **1)** Tellor's nature as an oracle, providing a periodically updating feed of values not known beforehand, and
@@ -34,7 +34,7 @@ The Tellor RNG derives its randomness from the fact that the exact value of the 
 and extremely difficult to manipulate.
 
 The Tellor protocol requires 5 miners to solve a proof of work challenge to be able to submit price values to the block about to be mined. For a malicious actor to cheat the RNG
-and predict these two values, they would have to **1)** manage to get all of the first 5 miners to input the same price value, and **3)** ensure that all 5 proof of work
+and predict these two values, they would have to **1)** manage to get all of the first 5 miners to input the same price value, and **2)** ensure that all 5 proof of work
 challenges are completed by the exact desired timetamp. This is terribly difficult.
 
 Can the Tellor RNG be manipulated? Absolutely. The usefulness of the Tellor RNG is a function of Tellor's decentralization, mining difficulty and block rate.
